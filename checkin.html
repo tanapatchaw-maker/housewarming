@@ -387,7 +387,7 @@
     const MAX_DISTANCE_M = 20;   // รัศมี 20 เมตร
     
     // Google Apps Script URL (ใส่ URL เดียวกับ index.html)
-    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxqSScCXdW7iXT_mp6pim6LRhVz6lENiwZm3VZ2d-5tlCGj-FQ-eGeKX5KnI5zRPUBw/exec';
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbw0oU4b3XFvZVhhtVKRnwav3Wn_t1BrXEE5UVc5cI22f1fwN3DWm5InlNJaAfYk22OC/exec';
 
     // =============================================
     
@@ -400,7 +400,7 @@
         btn.disabled = true;
         btn.textContent = '⏳ กำลังโหลด...';
 
-        if (SHEET_URL === 'https://script.google.com/macros/s/AKfycbxqSScCXdW7iXT_mp6pim6LRhVz6lENiwZm3VZ2d-5tlCGj-FQ-eGeKX5KnI5zRPUBw/exec') {
+        if (false) {
             btn.textContent = '❌ ยังไม่ได้ตั้งค่า URL';
             return;
         }
@@ -517,7 +517,7 @@
 
                 if (dist <= MAX_DISTANCE_M) {
                     // Send to sheet
-                    if (SHEET_URL !== 'https://script.google.com/macros/s/AKfycbxqSScCXdW7iXT_mp6pim6LRhVz6lENiwZm3VZ2d-5tlCGj-FQ-eGeKX5KnI5zRPUBw/exec') {
+                    if (true) {
                         var staffPayload = {
                                 action: 'checkin',
                                 regId: rid,
@@ -527,25 +527,8 @@
                                 checkinTime: new Date().toLocaleString('th-TH'),
                                 note: selectedGuest ? 'Staff check-in (จากรายชื่อ)' : 'Staff check-in (กรอกเอง)'
                             };
-                            var form2 = document.createElement('form');
-                            form2.method = 'POST';
-                            form2.action = SHEET_URL;
-                            form2.target = 'hidden_iframe';
-                            var inp2 = document.createElement('input');
-                            inp2.type = 'hidden';
-                            inp2.name = 'data';
-                            inp2.value = JSON.stringify(staffPayload);
-                            form2.appendChild(inp2);
-                            document.body.appendChild(form2);
-                            if (!document.getElementById('hidden_iframe')) {
-                                var iframe = document.createElement('iframe');
-                                iframe.name = 'hidden_iframe';
-                                iframe.id = 'hidden_iframe';
-                                iframe.style.display = 'none';
-                                document.body.appendChild(iframe);
-                            }
-                            form2.submit();
-                            form2.remove();
+                            var img3 = new Image();
+                            img3.src = SHEET_URL + '?action=checkin&data=' + encodeURIComponent(JSON.stringify(staffPayload));
                     }
 
                     document.getElementById('searchStatus').innerHTML = `
@@ -680,21 +663,17 @@
 
     function checkinSuccess(distance) {
         // Send to Google Sheet
-        if (SHEET_URL !== 'https://script.google.com/macros/s/AKfycbxqSScCXdW7iXT_mp6pim6LRhVz6lENiwZm3VZ2d-5tlCGj-FQ-eGeKX5KnI5zRPUBw/exec') {
-            fetch(SHEET_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({
-                    action: 'checkin',
-                    regId: regId,
-                    name: guestName,
-                    count: guestCount,
-                    distance: distance + 'm',
-                    checkinTime: new Date().toLocaleString('th-TH')
-                })
-            }).catch(err => console.log('Checkin save:', err));
-        }
+        var ciData = {
+            action: 'checkin',
+            regId: regId,
+            name: guestName,
+            count: guestCount,
+            distance: distance + 'm',
+            checkinTime: new Date().toLocaleString('th-TH')
+        };
+        var img2 = new Image();
+        img2.src = SHEET_URL + '?action=checkin&data=' + encodeURIComponent(JSON.stringify(ciData));
+        console.log('Checkin sent!', ciData);
 
         document.getElementById('statusArea').innerHTML = `
             <div class="status-box success animate">
