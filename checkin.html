@@ -520,7 +520,7 @@
                     if (SHEET_URL !== 'https://script.google.com/macros/s/AKfycbya9nSOvfOXJj2i6ZSvZ4_ooBRuNgidLXa-WtWXgXdwrwXJciJypetf0mLtkU2tEVRb/exec') {
                         fetch(SHEET_URL, {
                             method: 'POST', mode: 'no-cors',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 'Content-Type': 'text/plain' },
                             body: JSON.stringify({
                                 action: 'checkin',
                                 regId: rid,
@@ -669,7 +669,7 @@
             fetch(SHEET_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({
                     action: 'checkin',
                     regId: regId,
