@@ -1179,7 +1179,7 @@
             const regId = 'HW' + Date.now().toString(36).toUpperCase();
             
             if (guests.length > 0) {
-                const SHEET_URL = 'https://script.google.com/macros/s/AKfycbya9nSOvfOXJj2i6ZSvZ4_ooBRuNgidLXa-WtWXgXdwrwXJciJypetf0mLtkU2tEVRb/exec';
+                const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxqSScCXdW7iXT_mp6pim6LRhVz6lENiwZm3VZ2d-5tlCGj-FQ-eGeKX5KnI5zRPUBw/exec';
                 // ^^^ เปลี่ยน URL นี้เป็น Apps Script URL ของคุณ ^^^
 
                 const payload = {
@@ -1190,13 +1190,27 @@
                     guests: guests
                 };
 
-                if (SHEET_URL !== 'https://script.google.com/macros/s/AKfycbya9nSOvfOXJj2i6ZSvZ4_ooBRuNgidLXa-WtWXgXdwrwXJciJypetf0mLtkU2tEVRb/exec') {
-                    fetch(SHEET_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'text/plain' },
-                        body: JSON.stringify(payload)
-                    }).catch(err => console.log('Sheet save:', err));
+                if (SHEET_URL !== 'https://script.google.com/macros/s/AKfycbxqSScCXdW7iXT_mp6pim6LRhVz6lENiwZm3VZ2d-5tlCGj-FQ-eGeKX5KnI5zRPUBw/exec') {
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = SHEET_URL;
+                    form.target = 'hidden_iframe';
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'data';
+                    input.value = JSON.stringify(payload);
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    if (!document.getElementById('hidden_iframe')) {
+                        var iframe = document.createElement('iframe');
+                        iframe.name = 'hidden_iframe';
+                        iframe.id = 'hidden_iframe';
+                        iframe.style.display = 'none';
+                        document.body.appendChild(iframe);
+                    }
+                    form.submit();
+                    form.remove();
+                    console.log('RSVP data sent!');
                 }
 
                 // Show QR Code popup
