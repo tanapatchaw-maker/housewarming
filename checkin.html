@@ -198,19 +198,19 @@
     <div class="subtitle">Ariston White Haus — 28 March 2026</div>
 
     <div class="tab-row">
-        <button class="tab-btn active" id="tabScan" onclick="switchTab('scan')">📷 สแกน QR</button>
-        <button class="tab-btn" id="tabSearch" onclick="switchTab('search')">🔍 ค้นหาชื่อ</button>
+        <button class="tab-btn" id="tabScan" onclick="switchTab('scan')">📷 สแกน QR</button>
+        <button class="tab-btn active" id="tabSearch" onclick="switchTab('search')">🔍 ค้นหาชื่อ</button>
     </div>
 
     <!-- Scan Mode -->
-    <div id="scanMode">
+    <div id="scanMode" style="display:none;">
         <div id="qrReader"></div>
         <div id="scanResult"></div>
         <button class="btn btn-success" id="scanCheckinBtn" onclick="scanCheckin()" style="display:none;">✅ Check-in</button>
     </div>
 
     <!-- Search Mode -->
-    <div id="searchMode" style="display:none;">
+    <div id="searchMode">
         <div style="background:rgba(131,153,88,0.1);border-radius:10px;padding:10px;margin-bottom:12px;font-size:11px;color:var(--dark-green);">
             🔐 <b>สำหรับ Staff</b> — กรณีแขกลืม QR Code
         </div>
@@ -284,7 +284,7 @@
             function() {
                 document.getElementById('scanResult').innerHTML =
                     '<div class="status-box success"><div class="status-icon" style="animation:successPulse 1s ease infinite;">✅</div><div class="status-text" style="color:var(--dark-green);">Check-in สำเร็จ!</div><div class="status-detail">' + g.name + ' • ' + g.count + ' ท่าน<br>⏰ ' + new Date().toLocaleString('th-TH') + '</div></div>';
-                btn.textContent = '✅ เสร็จแล้ว'; launchConfetti();
+                btn.textContent = '✅ เสร็จแล้ว'; launchConfetti(); refreshGuests(); refreshGuests();
                 setTimeout(function() { scannedGuest = null; btn.style.display = 'none'; btn.disabled = false; document.getElementById('scanResult').innerHTML = ''; restartScanner(); }, 3000);
             },
             function(prevTime) {
@@ -297,7 +297,7 @@
     }
 
     function restartScanner() { document.getElementById('qrReader').innerHTML = ''; initScanner(); }
-    initScanner();
+    // Scanner starts when tab is clicked
 
     function switchTab(tab) {
         document.getElementById('scanMode').style.display = tab === 'scan' ? 'block' : 'none';
@@ -306,6 +306,8 @@
         document.getElementById('tabSearch').classList.toggle('active', tab === 'search');
         if (tab === 'scan') { restartScanner(); } else { if (scanner) scanner.stop().catch(function() {}); }
     }
+
+    var refreshTimer = null;
 
     function loadGuests() {
         var btn = document.getElementById('loadBtn');
@@ -317,8 +319,28 @@
                 btn.style.display = 'none';
                 document.getElementById('searchInput').style.display = 'block';
                 renderList(allGuests);
+                // Start auto-refresh every 15 seconds
+                if (!refreshTimer) {
+                    refreshTimer = setInterval(refreshGuests, 15000);
+                }
             })
             .catch(function() { btn.textContent = '🔄 ลองอีกครั้ง'; btn.disabled = false; });
+    }
+
+    function refreshGuests() {
+        fetch(SHEET_URL + '?action=getGuests')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var newGuests = data.guests || [];
+                // Only update if data changed
+                if (JSON.stringify(newGuests) !== JSON.stringify(allGuests)) {
+                    allGuests = newGuests;
+                    var q = document.getElementById('searchInput').value.trim().toLowerCase();
+                    var filtered = q ? allGuests.filter(function(g) { return g.name.toLowerCase().indexOf(q) !== -1; }) : allGuests;
+                    renderList(filtered);
+                }
+            })
+            .catch(function() {});
     }
 
     function renderList(guests) {
@@ -370,7 +392,7 @@
             function() {
                 document.getElementById('searchStatus').innerHTML =
                     '<div class="status-box success"><div class="status-icon" style="animation:successPulse 1s ease infinite;">✅</div><div class="status-text" style="color:var(--dark-green);">' + g.name + '</div><div class="status-detail">Check-in สำเร็จ! • ' + g.count + ' ท่าน<br>⏰ ' + new Date().toLocaleString('th-TH') + '</div></div>';
-                launchConfetti();
+                launchConfetti(); refreshGuests();
                 setTimeout(function() { selectedGuest = null; btn.style.display = 'none'; document.querySelectorAll('.guest-item').forEach(function(el) { el.classList.remove('selected'); }); document.getElementById('searchStatus').innerHTML = ''; }, 3000);
             },
             function(prevTime) {
