@@ -1561,7 +1561,7 @@
                     <button onclick="downloadQR('${qrImgURL}','${regId}','${name}')" style="padding:12px 24px;background:linear-gradient(135deg,#4caf50,#388e3c);color:white;border:none;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(76,175,80,0.3);display:inline-flex;align-items:center;gap:6px;">💾 บันทึกลงเครื่อง</button>
                     <button onclick="document.getElementById('qrOverlay').remove();" style="padding:12px 24px;background:linear-gradient(135deg,#2a2a2a,#3a3a3a);color:#c9a84c;border:none;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.15);">ปิด ✓</button>
                 </div>
-                <div style="margin-top:12px;font-size:11px;color:#8a6a50;">💡 กด "บันทึกลงเครื่อง" หรือ Screenshot เก็บไว้</div>
+                <div style="margin-top:12px;font-size:11px;color:#8a6a50;">📱 กด "บันทึก" แล้วกดค้างที่รูป → เซฟรูปภาพ</div>
             `;
             
             overlay.appendChild(popup);
@@ -1584,7 +1584,7 @@
                 ctx.fillStyle = '#2a2a2a';
                 ctx.font = 'bold 18px sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('🎫 บัตรเข้างาน', 150, 285);
+                ctx.fillText('บัตรเข้างาน', 150, 285);
                 ctx.font = '14px sans-serif';
                 ctx.fillText(name, 150, 310);
                 ctx.font = 'bold 13px sans-serif';
@@ -1593,11 +1593,23 @@
                 ctx.font = '11px sans-serif';
                 ctx.fillText('Housewarming 28 Mar 2026', 150, 358);
                 ctx.fillText('แสดง QR นี้ต่อ Staff หน้างาน', 150, 380);
+                var dataUrl = canvas.toDataURL('image/png');
+                // Try download first (works on desktop + Android Chrome)
                 var link = document.createElement('a');
                 link.download = 'QR-' + regId + '.png';
-                link.href = canvas.toDataURL('image/png');
+                link.href = dataUrl;
                 link.click();
+                // Also open in new page for iOS Safari (long press to save)
+                setTimeout(function() {
+                    var w = window.open('');
+                    if (w) {
+                        w.document.write('<html><head><title>QR Code - ' + regId + '</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#0A3323;font-family:sans-serif;}</style></head><body><img src="' + dataUrl + '" style="max-width:90%;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.3);"/><p style="color:#F7F4D5;margin-top:16px;font-size:14px;">📱 กดค้างที่รูป → บันทึกรูปภาพ</p></body></html>');
+                        w.document.close();
+                    }
+                }, 300);
             };
+            img.src = qrUrl;
+        }
             img.src = qrUrl;
         }
 
