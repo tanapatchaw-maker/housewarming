@@ -225,7 +225,7 @@
 <div class="confetti-burst" id="confetti"></div>
 
 <script>
-    var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxJ1rNtaaPqfGTXTiQ6YsXIURYB5VotglGmYPYDntkpFkDDuaoBLkrau6hAF-kDXWa0/exec';
+    var SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsEClTcPc7dWAa0Ymrl9m2If8PqtHrPTGiAhUTD_SWfu_h_rbys7b6HEAKlfouYGS9/exec';
     var allGuests = [];
     var selectedGuest = null;
     var scannedGuest = null;
@@ -325,15 +325,20 @@
         var c = document.getElementById('guestList');
         if (guests.length === 0) { c.innerHTML = '<div style="text-align:center;padding:16px;color:var(--moss);font-size:12px;">ไม่พบรายชื่อ</div>'; return; }
         var html = '';
+        var checkedCount = 0;
         for (var i = 0; i < guests.length; i++) {
             var g = guests[i];
+            var isChecked = g.checkedIn;
+            if (isChecked) checkedCount++;
             var badge = g.session === 'morning' ? '<span class="g-badge morning">🌅 เช้า</span>' :
                         g.session === 'evening' ? '<span class="g-badge evening">🌙 ค่ำ</span>' :
                         g.session === 'both' ? '<span class="g-badge both">✨ ทั้งคู่</span>' : '';
             var at = g.allergy && g.allergy !== '-' ? ' • ⚠️ ' + g.allergy : '';
-            html += '<div class="guest-item" onclick="selectGuest(' + i + ')" id="gi_' + i + '"><div><div class="g-name">' + g.name + '</div><div class="g-meta">' + g.count + ' ท่าน' + at + '</div></div>' + badge + '</div>';
+            var statusBadge = isChecked ? '<span style="font-size:9px;padding:2px 8px;border-radius:20px;font-weight:700;background:rgba(131,153,88,0.2);color:var(--moss);">✅ เข้างานแล้ว</span>' : '<span style="font-size:9px;padding:2px 8px;border-radius:20px;font-weight:700;background:rgba(211,150,140,0.15);color:var(--rosy);">⏳ ยังไม่มา</span>';
+            var itemStyle = isChecked ? 'opacity:0.6;' : '';
+            html += '<div class="guest-item" onclick="selectGuest(' + i + ')" id="gi_' + i + '" style="' + itemStyle + '"><div><div class="g-name">' + g.name + ' ' + statusBadge + '</div><div class="g-meta">' + g.count + ' ท่าน' + at + '</div></div>' + badge + '</div>';
         }
-        html += '<div style="text-align:center;padding:6px;font-size:10px;color:var(--moss);">ทั้งหมด ' + guests.length + ' รายการ</div>';
+        html += '<div style="text-align:center;padding:8px;font-size:10px;color:var(--moss);">ทั้งหมด ' + guests.length + ' รายการ • เข้างานแล้ว ' + checkedCount + ' รายการ</div>';
         c.innerHTML = html;
     }
 
