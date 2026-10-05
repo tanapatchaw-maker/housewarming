@@ -90,7 +90,7 @@
       switch (p.type) {
         case "wire": return !st.broken;
         case "switch": return !!st.closed;
-        case "led": return st.reversed ? !fwd : fwd;
+        case "led": if (st.belowVf) return false; return st.reversed ? !fwd : fwd;
         case "slot": return !!(st.material && st.material.conductor);
         default: return true;
       }

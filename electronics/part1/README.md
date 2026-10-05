@@ -2,7 +2,7 @@
 
 Interactive beginner course: Thai UI and narration, with technical terms kept in English. It's plain HTML/CSS/JS with no build step.
 
-**Status:** course shell, design system, Teaching Assistant, simulation framework and **Lesson 01** are done. Lessons 02–14 and the Final Project show as "เร็ว ๆ นี้" (coming soon).
+**Status:** course shell, design system, Teaching Assistant, simulation framework, **Lesson 01** (Electricity) and **Lesson 02** (Voltage) are done. Lessons 03–14 and the Final Project show as "เร็ว ๆ นี้" (coming soon).
 
 ## Run
 
@@ -29,9 +29,11 @@ js/core/app.js              hash router, sidebar, home
 js/components/icons.js      inline icon set
 js/components/ui.js         segmented, slider, predict, quiz, flip card, readout…
 js/components/assistant.js  Teaching Assistant (11 SVG poses + narration)
+js/components/kit.js        shared lesson visuals (LED chip, legend, view toggle, gauge, DC supply)
 js/sim/framework.js         shared clock (global pause), path helper, sim frame
 js/sim/circuit.js           circuit engine (real ⇄ symbol view, path check, particles)
 lessons/lesson01/           Lesson 01 content, simulations, styles
+lessons/lesson02/           Lesson 02 content, simulations, styles
 ```
 
 ## Adding a lesson

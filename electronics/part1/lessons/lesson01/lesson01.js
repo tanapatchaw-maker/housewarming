@@ -41,15 +41,7 @@
     }, o.circuit || {}));
   }
 
-  const ledState = (on) => h("span", { class: "big-state " + (on ? "big-state--on" : "big-state--off") }, h("span", { class: "lamp" }), on ? "LED ON" : "LED OFF");
-  const flowLegend = () => h("div", { class: "legend" },
-    h("span", { class: "legend__item" }, h("span", { class: "legend__swatch", style: { background: "var(--c-electron)" } }), "อิเล็กตรอน (−)"),
-    h("span", { class: "legend__item" }, h("span", { class: "legend__swatch", style: { background: "var(--c-current)", borderRadius: "3px" } }), "ลูกศร = Conventional Current"));
-
-  const viewToggle = (c) => ui.segmented([
-    { value: "real", label: "ของจริง" },
-    { value: "symbol", label: "สัญลักษณ์วงจร" },
-  ], c.style, (v) => c.setStyle(v), { label: "มุมมอง" });
+  const { ledState, flowLegend, viewToggle } = EFZ.kit;
 
   /* =========================================================
      STEP 1 — HOOK: อะไรทำให้หลอดไฟติด?
