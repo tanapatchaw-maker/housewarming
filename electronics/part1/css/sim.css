@@ -1,0 +1,83 @@
+/* =========================================================
+   Circuit engine + shared simulation graphics
+   ========================================================= */
+.cx { font-family: var(--font-head); }
+.cx-flow { pointer-events: none; }
+
+/* Wires */
+.cx-wire-sym { fill: none; stroke: var(--wire-symbol); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.cx-wire-out { fill: none; stroke: rgba(15, 23, 42, 0.28); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.cx-wire-in { fill: none; stroke-width: 6.2; stroke-linecap: round; stroke-linejoin: round; }
+.cx-wire-hi { fill: none; stroke: rgba(255, 255, 255, 0.32); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transform: translate(-0.8px, -1.2px); }
+.cx-lead { fill: none; stroke: #9ca3af; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.cx-missing { fill: none; stroke: var(--ink-400); stroke-width: 3; stroke-dasharray: 7 7; stroke-linecap: round; }
+.cx-copper { fill: var(--wire-copper); stroke: #92400e; stroke-width: 1; }
+
+/* Symbols */
+.cx-sym line, .cx-sym path { stroke: var(--wire-symbol); stroke-width: 3.2; stroke-linecap: round; fill: none; }
+.cx-sym .cx-plate-long { stroke-width: 3.2; }
+.cx-sym .cx-plate-short { stroke-width: 7; stroke-linecap: butt; }
+.cx-sym .cx-sym-dash { stroke-dasharray: 3 4; stroke-width: 2; }
+.cx-sym .cx-term { fill: var(--white); stroke: var(--wire-symbol); stroke-width: 2.4; }
+.cx-sym .cx-led-tri { fill: var(--white); stroke-linejoin: round; transition: fill var(--dur-med); }
+.cx-sym .cx-led-rays path { stroke: var(--ink-400); stroke-width: 2; transition: stroke var(--dur-med); }
+.cx-led.is-on .cx-sym .cx-led-tri { fill: #fecaca; }
+.cx-led.is-on .cx-sym .cx-led-rays path { stroke: var(--red-600); }
+
+/* Real-style components */
+.cx-res-body { stroke: #a07a3c; stroke-width: 1.2; }
+.cx-led-rim { fill: #7f1d1d; opacity: 0.85; }
+.cx-led-dome { fill: #b91c1c; opacity: 0.6; transition: fill var(--dur-med), opacity var(--dur-med); }
+.cx-led.is-on .cx-led-dome { fill: #ff2d2d; opacity: 1; }
+.cx-led-glow { opacity: 0; transition: opacity 240ms; pointer-events: none; }
+.cx-led.is-on .cx-led-glow { opacity: 1; animation: led-glow 2.2s ease-in-out infinite; }
+@keyframes led-glow { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+
+/* Switch hit target */
+.cx-hit { fill: transparent; cursor: pointer; }
+.cx-hit:focus-visible { outline: none; stroke: var(--blue-500); stroke-width: 2; stroke-dasharray: 4 3; }
+
+/* Labels */
+.cx-label { font-size: 15px; font-weight: 600; fill: var(--navy-800); paint-order: stroke; stroke: rgba(248, 250, 252, 0.95); stroke-width: 5px; stroke-linejoin: round; }
+.cx-label__sub { font-size: 12.5px; font-weight: 500; fill: var(--ink-500); }
+.cx-label--muted { fill: var(--ink-500); font-size: 13px; }
+.cx-pol { font-size: 20px; font-weight: 800; paint-order: stroke; stroke: rgba(248, 250, 252, 0.95); stroke-width: 5px; }
+.cx-pol--sm { font-size: 15px; }
+.cx-pol--plus { fill: var(--red-600); }
+.cx-pol--minus { fill: var(--navy-800); }
+.cx-slot-q { font-size: 18px; font-weight: 800; fill: var(--ink-400); }
+
+/* Highlight a part (legend hover / teaching focus) */
+.cx-part { transition: filter var(--dur-med); }
+.cx-part.is-hl { filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.95)) drop-shadow(0 0 2px rgba(249, 115, 22, 0.9)); }
+
+/* Particles */
+.cx-e circle { fill: var(--c-electron); stroke: #1e40af; stroke-width: 1; }
+.cx-e rect { fill: #fff; }
+.cx-a { fill: none; stroke: var(--c-current); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.9)); }
+
+/* Break handles */
+.cx-handle { cursor: pointer; }
+.cx-handle__hit { fill: transparent; }
+.cx-handle__ring { fill: var(--white); stroke: var(--navy-800); stroke-width: 2.4; transition: fill var(--dur-fast); }
+.cx-handle__txt { font-size: 13px; font-weight: 800; fill: var(--navy-800); pointer-events: none; }
+.cx-handle:hover .cx-handle__ring, .cx-handle:focus-visible .cx-handle__ring { fill: var(--yellow-100); }
+.cx-handle:focus { outline: none; }
+.cx-handle:focus-visible .cx-handle__ring { stroke: var(--blue-500); stroke-width: 3.4; }
+.cx-handle.is-broken .cx-handle__ring { fill: var(--red-600); stroke: var(--red-700); }
+.cx-handle.is-broken .cx-handle__txt { fill: var(--white); }
+.cx-handle.is-pending .cx-handle__ring { fill: var(--purple-100); stroke: var(--purple-600); stroke-width: 3; }
+.cx-handle.is-pending::before { content: ""; }
+
+/* ---------- Shared status chips under simulations ---------- */
+.status-line { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+.big-state {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-head); font-weight: 800; letter-spacing: 0.03em; font-size: var(--fs-lg);
+  padding: 6px 16px; border-radius: var(--r-md);
+}
+.big-state--on { background: var(--green-100); color: var(--green-700); }
+.big-state--off { background: var(--ink-100); color: var(--ink-500); }
+.big-state--warn { background: var(--red-100); color: var(--red-700); }
+.big-state .lamp { width: 14px; height: 14px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05); }
+.big-state--on .lamp { background: #ef4444; box-shadow: 0 0 12px 3px rgba(239, 68, 68, 0.6); }

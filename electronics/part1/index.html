@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Electronics from ZERO — Part 1</title>
+  <meta name="description" content="คอร์สอิเล็กทรอนิกส์แบบโต้ตอบสำหรับมือใหม่ — สิ่งที่ต้องรู้ก่อนจับ ESP32">
+  <meta name="theme-color" content="#0b1f44">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Prompt:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sim.css">
+  <link rel="stylesheet" href="css/lesson.css">
+  <link rel="stylesheet" href="lessons/lesson01/lesson01.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="topbar__menu" id="menu-btn" type="button" aria-label="เปิดเมนูบทเรียน">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a class="topbar__brand" href="#/">
+        <span class="part-badge">PART 1</span>
+        <span class="topbar__titles">
+          <span class="topbar__title">Electronics from ZERO</span>
+          <span class="topbar__subtitle">สิ่งที่ต้องรู้ก่อนจับ ESP32</span>
+        </span>
+      </a>
+      <span class="topbar__spacer"></span>
+      <span class="topbar__progress" aria-label="ความคืบหน้าของคอร์ส">
+        <span class="topbar__progress-text" id="course-meter-text">เรียนแล้ว 0/15</span>
+        <span class="meter"><span id="course-meter" style="width:0%"></span></span>
+      </span>
+    </header>
+
+    <aside class="sidebar" id="sidebar" aria-label="รายการบทเรียน">
+      <div class="sidebar__head">
+        <span class="sidebar__label">บทเรียน PART 1</span>
+        <span class="sidebar__total">≈ 126 นาที</span>
+      </div>
+      <ul class="nav" id="nav"></ul>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <main class="main" id="main">
+      <div class="view" id="view"></div>
+    </main>
+  </div>
+
+  <noscript><p style="padding:24px">คอร์สนี้ต้องเปิด JavaScript เพื่อใช้งานแอนิเมชันและการจำลอง</p></noscript>
+
+  <!-- core -->
+  <script src="js/core/util.js"></script>
+  <script src="js/core/store.js"></script>
+  <script src="js/components/icons.js"></script>
+  <script src="js/components/ui.js"></script>
+  <script src="js/components/assistant.js"></script>
+  <script src="js/sim/framework.js"></script>
+  <script src="js/sim/circuit.js"></script>
+  <script src="js/core/course.js"></script>
+  <!-- lessons (each registers itself) -->
+  <script src="lessons/lesson01/lesson01.js"></script>
+  <!-- shell -->
+  <script src="js/core/player.js"></script>
+  <script src="js/core/app.js"></script>
+</body>
+</html>
